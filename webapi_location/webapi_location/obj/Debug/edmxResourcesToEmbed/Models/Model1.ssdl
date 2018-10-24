@@ -1,0 +1,37 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="location_dbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="favorite_location">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="location_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="master_location">
+    <Key>
+      <PropertyRef Name="location_id" />
+    </Key>
+    <Property Name="location_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="location_name" Type="varchar" MaxLength="30" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_location_id_favorite_location">
+    <End Role="master_location" Type="Self.master_location" Multiplicity="1" />
+    <End Role="favorite_location" Type="Self.favorite_location" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="master_location">
+        <PropertyRef Name="location_id" />
+      </Principal>
+      <Dependent Role="favorite_location">
+        <PropertyRef Name="location_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="location_dbModelStoreContainer">
+    <EntitySet Name="favorite_location" EntityType="Self.favorite_location" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="master_location" EntityType="Self.master_location" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_location_id_favorite_location" Association="Self.FK_location_id_favorite_location">
+      <End Role="master_location" EntitySet="master_location" />
+      <End Role="favorite_location" EntitySet="favorite_location" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

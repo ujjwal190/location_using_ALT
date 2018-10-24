@@ -1,0 +1,39 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="location_dbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="favorite_location">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="location_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="master_location" Relationship="Self.FK_location_id_favorite_location" FromRole="favorite_location" ToRole="master_location" />
+  </EntityType>
+  <EntityType Name="master_location">
+    <Key>
+      <PropertyRef Name="location_id" />
+    </Key>
+    <Property Name="location_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="location_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="favorite_location" Relationship="Self.FK_location_id_favorite_location" FromRole="master_location" ToRole="favorite_location" />
+  </EntityType>
+  <Association Name="FK_location_id_favorite_location">
+    <End Role="master_location" Type="Self.master_location" Multiplicity="1" />
+    <End Role="favorite_location" Type="Self.favorite_location" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="master_location">
+        <PropertyRef Name="location_id" />
+      </Principal>
+      <Dependent Role="favorite_location">
+        <PropertyRef Name="location_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="location_dbEntities" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="favorite_location" EntityType="Self.favorite_location" />
+    <EntitySet Name="master_location" EntityType="Self.master_location" />
+    <AssociationSet Name="FK_location_id_favorite_location" Association="Self.FK_location_id_favorite_location">
+      <End Role="master_location" EntitySet="master_location" />
+      <End Role="favorite_location" EntitySet="favorite_location" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

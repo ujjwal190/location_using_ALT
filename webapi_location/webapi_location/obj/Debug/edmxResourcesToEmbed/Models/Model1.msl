@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="location_dbModelStoreContainer" CdmEntityContainer="location_dbEntities">
+    <EntitySetMapping Name="favorite_location">
+      <EntityTypeMapping TypeName="location_dbModel.favorite_location">
+        <MappingFragment StoreEntitySet="favorite_location">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="location_id" ColumnName="location_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="master_location">
+      <EntityTypeMapping TypeName="location_dbModel.master_location">
+        <MappingFragment StoreEntitySet="master_location">
+          <ScalarProperty Name="location_id" ColumnName="location_id" />
+          <ScalarProperty Name="location_name" ColumnName="location_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

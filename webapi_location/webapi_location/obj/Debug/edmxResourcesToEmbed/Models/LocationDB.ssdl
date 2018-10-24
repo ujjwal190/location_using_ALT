@@ -1,0 +1,93 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LocationDbModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="favorite_location">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="location_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="master_location">
+    <Key>
+      <PropertyRef Name="location_id" />
+    </Key>
+    <Property Name="location_id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="location_name" Type="varchar" MaxLength="30" Nullable="false" />
+  </EntityType>
+  <EntityType Name="user_favorite">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+    <Property Name="user_id" Type="int" Nullable="false" />
+    <Property Name="location_id" Type="int" Nullable="false" />
+  </EntityType>
+  <EntityType Name="user_information">
+    <Key>
+      <PropertyRef Name="user_id" />
+    </Key>
+    <Property Name="user_id" Type="int" Nullable="false" />
+    <Property Name="user_name" Type="varchar" MaxLength="50" Nullable="false" />
+  </EntityType>
+  <Association Name="FK_location_id_favorite_location">
+    <End Role="master_location" Type="Self.master_location" Multiplicity="1" />
+    <End Role="favorite_location" Type="Self.favorite_location" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="master_location">
+        <PropertyRef Name="location_id" />
+      </Principal>
+      <Dependent Role="favorite_location">
+        <PropertyRef Name="location_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_location_id_master_location">
+    <End Role="master_location" Type="Self.master_location" Multiplicity="1" />
+    <End Role="user_favorite" Type="Self.user_favorite" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="master_location">
+        <PropertyRef Name="location_id" />
+      </Principal>
+      <Dependent Role="user_favorite">
+        <PropertyRef Name="location_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_user_id_user_favorite">
+    <End Role="user_information" Type="Self.user_information" Multiplicity="1" />
+    <End Role="user_favorite" Type="Self.user_favorite" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user_information">
+        <PropertyRef Name="user_id" />
+      </Principal>
+      <Dependent Role="user_favorite">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Function Name="sp_FavoriteLocation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo" />
+  <Function Name="sp_insert" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="location_name" Type="varchar" Mode="In" />
+  </Function>
+  <Function Name="sp_UserFavoriteLocation" Aggregate="false" BuiltIn="false" NiladicFunction="false" IsComposable="false" ParameterTypeSemantics="AllowImplicitConversion" Schema="dbo">
+    <Parameter Name="uid" Type="nvarchar" Mode="In" />
+  </Function>
+  <EntityContainer Name="LocationDbModelStoreContainer">
+    <EntitySet Name="favorite_location" EntityType="Self.favorite_location" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="master_location" EntityType="Self.master_location" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="user_favorite" EntityType="Self.user_favorite" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="user_information" EntityType="Self.user_information" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_location_id_favorite_location" Association="Self.FK_location_id_favorite_location">
+      <End Role="master_location" EntitySet="master_location" />
+      <End Role="favorite_location" EntitySet="favorite_location" />
+    </AssociationSet>
+    <AssociationSet Name="FK_location_id_master_location" Association="Self.FK_location_id_master_location">
+      <End Role="master_location" EntitySet="master_location" />
+      <End Role="user_favorite" EntitySet="user_favorite" />
+    </AssociationSet>
+    <AssociationSet Name="FK_user_id_user_favorite" Association="Self.FK_user_id_user_favorite">
+      <End Role="user_information" EntitySet="user_information" />
+      <End Role="user_favorite" EntitySet="user_favorite" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

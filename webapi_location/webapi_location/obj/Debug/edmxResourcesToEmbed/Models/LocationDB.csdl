@@ -1,0 +1,108 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="LocationDbModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityType Name="favorite_location">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="location_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="master_location" Relationship="Self.FK_location_id_favorite_location" FromRole="favorite_location" ToRole="master_location" />
+  </EntityType>
+  <EntityType Name="master_location">
+    <Key>
+      <PropertyRef Name="location_id" />
+    </Key>
+    <Property Name="location_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="location_name" Type="String" MaxLength="30" FixedLength="false" Unicode="false" Nullable="false" />
+    <NavigationProperty Name="favorite_location" Relationship="Self.FK_location_id_favorite_location" FromRole="master_location" ToRole="favorite_location" />
+    <NavigationProperty Name="user_favorite" Relationship="LocationDbModel.FK_location_id_master_location" FromRole="master_location" ToRole="user_favorite" />
+  </EntityType>
+  <Association Name="FK_location_id_favorite_location">
+    <End Role="master_location" Type="Self.master_location" Multiplicity="1" />
+    <End Role="favorite_location" Type="Self.favorite_location" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="master_location">
+        <PropertyRef Name="location_id" />
+      </Principal>
+      <Dependent Role="favorite_location">
+        <PropertyRef Name="location_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="LocationDb" annotation:LazyLoadingEnabled="true">
+    <EntitySet Name="favorite_location" EntityType="Self.favorite_location" />
+    <EntitySet Name="master_location" EntityType="Self.master_location" />
+    <AssociationSet Name="FK_location_id_favorite_location" Association="Self.FK_location_id_favorite_location">
+      <End Role="master_location" EntitySet="master_location" />
+      <End Role="favorite_location" EntitySet="favorite_location" />
+    </AssociationSet>
+    <FunctionImport Name="sp_FavoriteLocation" ReturnType="Collection(LocationDbModel.sp_FavoriteLocation_Result)" />
+    <FunctionImport Name="sp_insert">
+      <Parameter Name="location_name" Mode="In" Type="String" />
+    </FunctionImport>
+    <EntitySet Name="user_favorite" EntityType="LocationDbModel.user_favorite" />
+    <EntitySet Name="user_information" EntityType="LocationDbModel.user_information" />
+    <AssociationSet Name="FK_location_id_master_location" Association="LocationDbModel.FK_location_id_master_location">
+      <End Role="master_location" EntitySet="master_location" />
+      <End Role="user_favorite" EntitySet="user_favorite" />
+    </AssociationSet>
+    <AssociationSet Name="FK_user_id_user_favorite" Association="LocationDbModel.FK_user_id_user_favorite">
+      <End Role="user_information" EntitySet="user_information" />
+      <End Role="user_favorite" EntitySet="user_favorite" />
+    </AssociationSet>
+    <FunctionImport Name="sp_UserFavoriteLocation" ReturnType="Collection(LocationDbModel.sp_UserFavoriteLocation_Result)">
+      <Parameter Name="uid" Mode="In" Type="String" />
+    </FunctionImport>
+  </EntityContainer>
+  <ComplexType Name="sp_FavoriteLocation_Result">
+    <Property Type="Int32" Name="location_id" Nullable="false" />
+    <Property Type="String" Name="location_name" Nullable="false" MaxLength="30" />
+  </ComplexType>
+  <EntityType Name="user_favorite">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+    <Property Name="user_id" Type="Int32" Nullable="false" />
+    <Property Name="location_id" Type="Int32" Nullable="false" />
+    <NavigationProperty Name="master_location" Relationship="LocationDbModel.FK_location_id_master_location" FromRole="user_favorite" ToRole="master_location" />
+    <NavigationProperty Name="user_information" Relationship="LocationDbModel.FK_user_id_user_favorite" FromRole="user_favorite" ToRole="user_information" />
+  </EntityType>
+  <EntityType Name="user_information">
+    <Key>
+      <PropertyRef Name="user_id" />
+    </Key>
+    <Property Name="user_id" Type="Int32" Nullable="false" />
+    <Property Name="user_name" Type="String" Nullable="false" MaxLength="50" FixedLength="false" Unicode="false" />
+    <NavigationProperty Name="user_favorite" Relationship="LocationDbModel.FK_user_id_user_favorite" FromRole="user_information" ToRole="user_favorite" />
+  </EntityType>
+  <Association Name="FK_location_id_master_location">
+    <End Type="LocationDbModel.master_location" Role="master_location" Multiplicity="1" />
+    <End Type="LocationDbModel.user_favorite" Role="user_favorite" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="master_location">
+        <PropertyRef Name="location_id" />
+      </Principal>
+      <Dependent Role="user_favorite">
+        <PropertyRef Name="location_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_user_id_user_favorite">
+    <End Type="LocationDbModel.user_information" Role="user_information" Multiplicity="1" />
+    <End Type="LocationDbModel.user_favorite" Role="user_favorite" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="user_information">
+        <PropertyRef Name="user_id" />
+      </Principal>
+      <Dependent Role="user_favorite">
+        <PropertyRef Name="user_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <ComplexType Name="sp_UserFavoriteLocation_Result">
+    <Property Type="Int32" Name="user_id" Nullable="false" />
+    <Property Type="Int32" Name="location_id" Nullable="false" />
+    <Property Type="String" Name="location_name" Nullable="false" MaxLength="30" />
+  </ComplexType>
+</Schema>

@@ -1,0 +1,56 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="LocationDbModelStoreContainer" CdmEntityContainer="LocationDb">
+    <EntitySetMapping Name="favorite_location">
+      <EntityTypeMapping TypeName="LocationDbModel.favorite_location">
+        <MappingFragment StoreEntitySet="favorite_location">
+          <ScalarProperty Name="id" ColumnName="id" />
+          <ScalarProperty Name="location_id" ColumnName="location_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="master_location">
+      <EntityTypeMapping TypeName="LocationDbModel.master_location">
+        <MappingFragment StoreEntitySet="master_location">
+          <ScalarProperty Name="location_id" ColumnName="location_id" />
+          <ScalarProperty Name="location_name" ColumnName="location_name" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_FavoriteLocation" FunctionName="LocationDbModel.Store.sp_FavoriteLocation">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="LocationDbModel.sp_FavoriteLocation_Result">
+          <ScalarProperty Name="location_id" ColumnName="location_id" />
+          <ScalarProperty Name="location_name" ColumnName="location_name" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+    <FunctionImportMapping FunctionImportName="sp_insert" FunctionName="LocationDbModel.Store.sp_insert" />
+    <EntitySetMapping Name="user_favorite">
+      <EntityTypeMapping TypeName="LocationDbModel.user_favorite">
+        <MappingFragment StoreEntitySet="user_favorite">
+          <ScalarProperty Name="location_id" ColumnName="location_id" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="user_information">
+      <EntityTypeMapping TypeName="LocationDbModel.user_information">
+        <MappingFragment StoreEntitySet="user_information">
+          <ScalarProperty Name="user_name" ColumnName="user_name" />
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <FunctionImportMapping FunctionImportName="sp_UserFavoriteLocation" FunctionName="LocationDbModel.Store.sp_UserFavoriteLocation">
+      <ResultMapping>
+        <ComplexTypeMapping TypeName="LocationDbModel.sp_UserFavoriteLocation_Result">
+          <ScalarProperty Name="user_id" ColumnName="user_id" />
+          <ScalarProperty Name="location_id" ColumnName="location_id" />
+          <ScalarProperty Name="location_name" ColumnName="location_name" />
+        </ComplexTypeMapping>
+      </ResultMapping>
+    </FunctionImportMapping>
+  </EntityContainerMapping>
+</Mapping>
